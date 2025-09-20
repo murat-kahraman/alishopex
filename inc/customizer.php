@@ -1,20 +1,29 @@
 <?php
 /**
- * Alishopex | E ticaret Teması Theme Customizer
+ * Alishopex | E-ticaret Teması - Theme Customizer
  *
  * @package Alishopex_|_E_ticaret_Teması
  */
 
 /**
- * Add postMessage support for site title and description for the Theme Customizer.
+ * Tema Özelleştirici Ayarları
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function alishopex_customize_register( $wp_customize ) {
-	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
 
+	// Site title & description canlı önizleme
+	if( $wp_customize->get_setting( 'blogname' ) ) {
+		$wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
+	}
+	if( $wp_customize->get_setting( 'blogdescription' ) ) {
+		$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
+	}
+	if( $wp_customize->get_setting( 'header_textcolor' ) ) {
+		$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+	}
+
+	// Selective refresh
 	if ( isset( $wp_customize->selective_refresh ) ) {
 		$wp_customize->selective_refresh->add_partial(
 			'blogname',
@@ -31,31 +40,79 @@ function alishopex_customize_register( $wp_customize ) {
 			)
 		);
 	}
+
+	/**
+	 * =======================
+	 * Özel Alanlar (Sosyal Medya & İletişim)
+	 * =======================
+	 */
+	$wp_customize->add_section('alishopex_social_section', array(
+		'title'    => __('Sosyal & İletişim Ayarları','alishopex'),
+		'priority' => 30,
+	));
+
+	// Facebook
+	$wp_customize->add_setting('alishopex_facebook', array(
+		'default' => '#',
+	));
+	$wp_customize->add_control('alishopex_facebook', array(
+		'label'   => 'Facebook Linki',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Instagram
+	$wp_customize->add_setting('alishopex_instagram', array(
+		'default' => '#',
+	));
+	$wp_customize->add_control('alishopex_instagram', array(
+		'label'   => 'Instagram Linki',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Telefon Numarası
+	$wp_customize->add_setting('alishopex_phone', array(
+		'default' => '0 (212) 000 00 00',
+	));
+	$wp_customize->add_control('alishopex_phone', array(
+		'label'   => 'Telefon Numarası',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Adres
+	$wp_customize->add_setting('alishopex_address', array(
+		'default' => 'Adres buraya gelecek...',
+	));
+	$wp_customize->add_control('alishopex_address', array(
+		'label'   => 'Adres',
+		'section' => 'alishopex_social_section',
+		'type'    => 'textarea',
+	));
 }
 add_action( 'customize_register', 'alishopex_customize_register' );
 
 /**
- * Render the site title for the selective refresh partial.
- *
- * @return void
+ * Selective refresh fonksiyonları
  */
 function alishopex_customize_partial_blogname() {
 	bloginfo( 'name' );
 }
-
-/**
- * Render the site tagline for the selective refresh partial.
- *
- * @return void
- */
 function alishopex_customize_partial_blogdescription() {
 	bloginfo( 'description' );
 }
 
 /**
- * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
+ * Özelleştirici önizleme için JS
  */
 function alishopex_customize_preview_js() {
-	wp_enqueue_script( 'alishopex-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), _S_VERSION, true );
+	wp_enqueue_script(
+		'alishopex-customizer',
+		get_template_directory_uri() . '/js/customizer.js',
+		array( 'customize-preview' ),
+		_S_VERSION,
+		true
+	);
 }
 add_action( 'customize_preview_init', 'alishopex_customize_preview_js' );
