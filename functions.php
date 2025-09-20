@@ -8,58 +8,33 @@
  */
 
 if ( ! defined( '_S_VERSION' ) ) {
-	// Tema sürümünü sabitler, her yeni güncellemede değiştirilir.
 	define( '_S_VERSION', '1.0.0' );
 }
 
 /**
  * Tema kurulumu ve destekler
- * 
- * Burada WordPress’in tema için sunduğu özelliklere destek eklenir.
- * - Çeviri dosyaları
- * - Başlık yönetimi
- * - Öne çıkan görsel (thumbnail)
- * - Menü kaydı
- * - HTML5 desteği
- * - Arka plan, logo vb.
- * - WooCommerce desteği
  */
 function alishopex_setup() {
-
-	// Çeviri desteği
 	load_theme_textdomain( 'alishopex', get_template_directory() . '/languages' );
-
-	// RSS feed linkleri
 	add_theme_support( 'automatic-feed-links' );
-
-	// <title> etiketini WordPress yönetsin
 	add_theme_support( 'title-tag' );
-
-	// Öne çıkarılmış görsel desteği
 	add_theme_support( 'post-thumbnails' );
 
-	// Menü kaydı (Burada menü ismi "Ana Menü")
+	// Menü tanımları
 	register_nav_menus(
 		array(
-			'primary' => esc_html__( 'Ana Menü', 'alishopex' ),
+			'primary'          => esc_html__( 'Ana Menü', 'alishopex' ),
+			'footer-resources' => esc_html__( 'Footer Resources', 'alishopex' ),
+			'footer-support'   => esc_html__( 'Footer Support', 'alishopex' ),
+			'footer-products'  => esc_html__( 'Footer Products', 'alishopex' ),
 		)
 	);
 
-	// HTML5 desteği
 	add_theme_support(
 		'html5',
-		array(
-			'search-form',
-			'comment-form',
-			'comment-list',
-			'gallery',
-			'caption',
-			'style',
-			'script',
-		)
+		array( 'search-form','comment-form','comment-list','gallery','caption','style','script' )
 	);
 
-	// Özel arka plan desteği
 	add_theme_support(
 		'custom-background',
 		apply_filters(
@@ -71,10 +46,7 @@ function alishopex_setup() {
 		)
 	);
 
-	// Widget’larda canlı önizleme desteği
 	add_theme_support( 'customize-selective-refresh-widgets' );
-
-	// Özel logo desteği
 	add_theme_support(
 		'custom-logo',
 		array(
@@ -85,15 +57,13 @@ function alishopex_setup() {
 		)
 	);
 
-	// WooCommerce desteği (e-ticaret uyumluluğu)
+	// WooCommerce desteği
 	add_theme_support( 'woocommerce' );
 }
 add_action( 'after_setup_theme', 'alishopex_setup' );
 
 /**
  * İçerik genişliği
- *
- * Tema tasarımına göre varsayılan içerik genişliği piksel cinsinden belirlenir.
  */
 function alishopex_content_width() {
 	$GLOBALS['content_width'] = apply_filters( 'alishopex_content_width', 640 );
@@ -101,9 +71,7 @@ function alishopex_content_width() {
 add_action( 'after_setup_theme', 'alishopex_content_width', 0 );
 
 /**
- * Widget Alanı Kaydı
- *
- * Kenar çubuğu (sidebar) gibi widget eklenebilecek alanlar burada tanımlanır.
+ * Widget Alanı
  */
 function alishopex_widgets_init() {
 	register_sidebar(
@@ -121,11 +89,7 @@ function alishopex_widgets_init() {
 add_action( 'widgets_init', 'alishopex_widgets_init' );
 
 /**
- * Tema CSS ve JS dosyalarını çağırma (enqueue)
- *
- * Burada tema ile birlikte yüklenecek stil ve script dosyaları belirtilir.
- * Eğer ek dosya olan enqueue.php’de başka script ekleme fonksiyonların varsa,
- * onlar da ayrıca çağrılır.
+ * Stil & Script Enqueue
  */
 function alishopex_scripts() {
 	wp_enqueue_style( 'alishopex-style', get_stylesheet_uri(), array(), _S_VERSION );
@@ -139,24 +103,92 @@ function alishopex_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'alishopex_scripts' );
 
-// Eğer enqueue.php dosyası varsa eklenir (ekstra script/style yazma yeri)
+// Enqueue dosyası
 require get_template_directory() . '/inc/enqueue.php';
 
 /**
  * Ek özel dosyalar
- * (Tema yapısına göre bölünmüş işlevler burada yüklenir.)
  */
-require get_template_directory() . '/inc/custom-header.php';   // Özel header özellikleri
-require get_template_directory() . '/inc/template-tags.php';   // Özel tema etiketleri
-require get_template_directory() . '/inc/template-functions.php'; // Tema işlevleri
-require get_template_directory() . '/inc/customizer.php';      // Customizer ayarları
+require get_template_directory() . '/inc/custom-header.php';
+require get_template_directory() . '/inc/template-tags.php';
+require get_template_directory() . '/inc/template-functions.php';
+require get_template_directory() . '/inc/customizer.php';
 
 // Jetpack uyumluluğu
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
-
 // WooCommerce uyumluluğu
 if ( class_exists( 'WooCommerce' ) ) {
 	require get_template_directory() . '/inc/woocommerce.php';
 }
+
+/**
+ * === ACF Options Page (Tema Genel Ayar Paneli) ===
+ */
+if( function_exists('acf_add_options_page') ) {
+	acf_add_options_page(array(
+		'page_title' 	=> 'Tema Ayarları',
+		'menu_title'	=> 'Tema Ayarları',
+		'menu_slug' 	=> 'theme-general-settings',
+		'capability'	=> 'edit_posts',
+		'redirect'		=> false
+	));
+
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'Header Ayarları',
+		'menu_title'	=> 'Header',
+		'parent_slug'	=> 'theme-general-settings',
+	));
+	
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'Footer Ayarları',
+		'menu_title'	=> 'Footer',
+		'parent_slug'	=> 'theme-general-settings',
+	));
+}
+
+/**
+ * === Özelleştirici (Customizer) Alanları ===
+ * Buradan telefon, adres, mail vs. ekleyelim
+ */
+function alishopex_customize_register($wp_customize){
+	// Sosyal Medya paneli
+	$wp_customize->add_section('alishopex_social_section', array(
+		'title'    => __('Sosyal Medya Linkleri','alishopex'),
+		'priority' => 30,
+	));
+
+	// Facebook
+	$wp_customize->add_setting('alishopex_facebook');
+	$wp_customize->add_control('alishopex_facebook', array(
+		'label'   => 'Facebook Linki',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Instagram
+	$wp_customize->add_setting('alishopex_instagram');
+	$wp_customize->add_control('alishopex_instagram', array(
+		'label'   => 'Instagram Linki',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Telefon
+	$wp_customize->add_setting('alishopex_phone');
+	$wp_customize->add_control('alishopex_phone', array(
+		'label'   => 'Telefon Numarası',
+		'section' => 'alishopex_social_section',
+		'type'    => 'text',
+	));
+
+	// Adres
+	$wp_customize->add_setting('alishopex_address');
+	$wp_customize->add_control('alishopex_address', array(
+		'label'   => 'Adres',
+		'section' => 'alishopex_social_section',
+		'type'    => 'textarea',
+	));
+}
+add_action('customize_register','alishopex_customize_register');
