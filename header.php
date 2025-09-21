@@ -10,8 +10,6 @@
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <!-- Favicon -->
     <link rel="icon" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/favicon.ico' ); ?>" type="image/x-icon">
 
     <!-- Google Fonts -->
@@ -24,7 +22,6 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<!-- main header -->
 <header class="main-header header-style-four dark-header">
     <div class="shape" style="background-image: url(<?php echo esc_url( get_template_directory_uri() . '/assets/images/shape/shape-9.png' ); ?>);"></div>
     
@@ -33,17 +30,37 @@
         <div class="auto-container">
             <div class="top-inner">
                 <ul class="info-list">
-                    <li><i class="icon-2"></i><?php esc_html_e('Open Hours:', 'alishopex'); ?> <span>Mon - Fri 8am - 6pm</span></li>
-                    <li><i class="icon-3"></i><button type="button"><?php esc_html_e('Live Chat', 'alishopex'); ?></button></li>
-                    <li><i class="icon-4"></i><a href="tel:00000000000"><?php esc_html_e('Call Support', 'alishopex'); ?></a></li>
-                </ul>
-                <div class="right-column">
-                    <div class="text mr_30">
-                        <i class="icon-5"></i>
-                        <p><?php esc_html_e('Fast and Free Shipping all over Europe', 'alishopex'); ?></p>
-                    </div>
+                    <!-- Telefon -->
+                    <?php if( get_field('ust_menu_phone','option') ): ?>
+                        <li><i class="icon-2"></i>
+                            <a href="tel:<?php echo esc_attr( get_field('ust_menu_phone','option') ); ?>">
+                                <?php echo esc_html( get_field('ust_menu_phone','option') ); ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
 
-                    <!-- Language Switcher -->
+                    <!-- Mail -->
+                    <?php if( get_field('ust_menu_email','option') ): ?>
+                        <li><i class="icon-3"></i>
+                            <a href="mailto:<?php echo antispambot( get_field('ust_menu_email','option') ); ?>">
+                                <?php echo antispambot( get_field('ust_menu_email','option') ); ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
+                    <li><i class="icon-4"></i><?php esc_html_e('Support Line','alishopex'); ?></li>
+                </ul>
+
+                <div class="right-column">
+                    <!-- Üst Bar Yazısı -->
+                    <?php if( get_field('ust_menu_text','option') ): ?>
+                        <div class="text mr_30">
+                            <i class="icon-5"></i>
+                            <p><?php echo esc_html( get_field('ust_menu_text','option') ); ?></p>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Language Switcher (statik bırakıldı – gerekirse eklentiyle dinamik yapılır) -->
                     <div class="language-picker js-language-picker mr_30">
                         <form>
                             <select name="lang">
@@ -54,7 +71,7 @@
                         </form>
                     </div>
 
-                    <!-- Currency Switcher -->
+                    <!-- Currency Switcher (statik) -->
                     <div class="select-box">
                         <select class="wide">
                            <option data-display="USD">USD</option>
@@ -134,4 +151,3 @@
         </div>
     </div>
 </header>
-<!-- main-header end -->

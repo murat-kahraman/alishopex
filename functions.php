@@ -139,23 +139,45 @@ if ( class_exists( 'WooCommerce' ) ) {
  * === ACF Options Page (Tema Genel Ayar Paneli) ===
  */
 if( function_exists('acf_add_options_page') ) {
+
+	// Genel Site Ayarları Paneli
 	acf_add_options_page(array(
-		'page_title' 	=> 'Site Menü Ayarları',
+		'page_title' 	=> 'Site Yönetim Ayarları',
 		'menu_title'	=> 'Site Ayarları',
 		'menu_slug' 	=> 'tema-genel-ayarlari',
 		'capability'	=> 'edit_posts',
 		'redirect'		=> false
 	));
 
+	// Üst Menü
 	acf_add_options_sub_page(array(
 		'page_title' 	=> 'Üst Menü Ayarları',
 		'menu_title'	=> 'Üst Menü',
 		'parent_slug'	=> 'tema-genel-ayarlari',
+		'menu_slug'     => 'ust-menu', // JSON ile eşleşmesi için
 	));
-	
+
+	// Alt Menü
 	acf_add_options_sub_page(array(
 		'page_title' 	=> 'Alt Menü Ayarları',
 		'menu_title'	=> 'Alt Menü',
 		'parent_slug'	=> 'tema-genel-ayarlari',
+		'menu_slug'     => 'alt-menu', // JSON ile eşleşmesi için
+	));
+
+	// Hero Section
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'Hero Ayarları',
+		'menu_title'	=> 'Hero',
+		'parent_slug'	=> 'tema-genel-ayarlari',
+		'menu_slug'     => 'hero-settings'
+	));
+
+	// CTA Section
+	acf_add_options_sub_page(array(
+		'page_title' 	=> 'CTA Ayarları',
+		'menu_title'	=> 'CTA',
+		'parent_slug'	=> 'tema-genel-ayarlari',
+		'menu_slug'     => 'cta-settings'
 	));
 }
