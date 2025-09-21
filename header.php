@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- Favicon -->
-    <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/favicon.ico' ); ?>" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -26,28 +26,25 @@
 
 <!-- main header -->
 <header class="main-header header-style-four dark-header">
-    <div class="shape" style="background-image: url(<?php echo get_template_directory_uri(); ?>/assets/images/shape/shape-9.png);"></div>
+    <div class="shape" style="background-image: url(<?php echo esc_url( get_template_directory_uri() . '/assets/images/shape/shape-9.png' ); ?>);"></div>
     
     <!-- header-top -->
     <div class="header-top">
         <div class="auto-container">
             <div class="top-inner">
                 <ul class="info-list">
-                    <li><i class="icon-2"></i>Open Hours: <span>Mon - Fri 8am - 6pm</span></li>
-                    <li><i class="icon-3"></i><button type="button">Live Chat</button></li>
-                    <li><i class="icon-4"></i><a href="tel:00000000000">Call Support</a></li>
+                    <li><i class="icon-2"></i><?php esc_html_e('Open Hours:', 'alishopex'); ?> <span>Mon - Fri 8am - 6pm</span></li>
+                    <li><i class="icon-3"></i><button type="button"><?php esc_html_e('Live Chat', 'alishopex'); ?></button></li>
+                    <li><i class="icon-4"></i><a href="tel:00000000000"><?php esc_html_e('Call Support', 'alishopex'); ?></a></li>
                 </ul>
                 <div class="right-column">
                     <div class="text mr_30">
                         <i class="icon-5"></i>
-                        <p>Fast and Free Shipping all over Europe</p>
+                        <p><?php esc_html_e('Fast and Free Shipping all over Europe', 'alishopex'); ?></p>
                     </div>
 
                     <!-- Language Switcher -->
                     <div class="language-picker js-language-picker mr_30">
-                        <?php 
-                        // Dilersen burayı WPML/Polylang gibi eklentilerle dinamik yapabilirsin
-                        ?>
                         <form>
                             <select name="lang">
                                 <option value="en" selected>EN</option>
@@ -74,11 +71,15 @@
     <div class="header-upper">
         <div class="auto-container">
             <div class="upper-inner">
-                
                 <!-- Logo -->
                 <figure class="logo-box">
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo-2.png" alt="<?php bloginfo('name'); ?>">
+                        <?php 
+                        if ( has_custom_logo() ) {
+                            the_custom_logo();
+                        } else { ?>
+                            <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/logo-2.png' ); ?>" alt="<?php bloginfo('name'); ?>">
+                        <?php } ?>
                     </a>
                 </figure>
 
@@ -92,10 +93,10 @@
                     <li><a href="#"><i class="icon-1"></i></a></li>
                     <li><a href="#"><i class="icon-7"></i></a></li>
                     <li>
-                        <a href="<?php echo wc_get_cart_url(); ?>">
+                        <a href="<?php echo esc_url( wc_get_cart_url() ); ?>">
                             <i class="icon-6"></i>
-                            <?php if ( WC()->cart->get_cart_contents_count() > 0 ) : ?>
-                                <span><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+                            <?php if ( function_exists('WC') && WC()->cart && WC()->cart->get_cart_contents_count() > 0 ) : ?>
+                                <span><?php echo esc_html( WC()->cart->get_cart_contents_count() ); ?></span>
                             <?php endif; ?>
                         </a>
                     </li>
@@ -116,6 +117,7 @@
                         'menu_class'     => 'navigation clearfix',
                         'container'      => 'nav',
                         'container_class'=> 'main-menu navbar-expand-md navbar-light clearfix',
+                        'fallback_cb'    => false
                     ));
                     ?>
                 </div>
@@ -123,8 +125,8 @@
                 <!-- My Account -->
                 <div class="menu-right-content">
                     <div class="btn-box">
-                        <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>">
-                            <i class="icon-25"></i> My Account
+                        <a href="<?php echo esc_url( get_permalink( get_option('woocommerce_myaccount_page_id') ) ); ?>">
+                            <i class="icon-25"></i> <?php esc_html_e('My Account','alishopex'); ?>
                         </a>
                     </div>
                 </div>
